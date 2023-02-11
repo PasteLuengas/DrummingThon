@@ -1,0 +1,37 @@
+while playing:
+        for i in range(len(kick_pattern)):
+            if kick_pattern[i]:
+                if kick_pattern[i] == 1:
+                    Kick.play()
+            else: 
+                pass
+            if Snare_pattern[i]:
+                if Snare_pattern[i] == 1:
+                    Snare.play()
+            else: 
+                pass
+            if Ride1_pattern[i]:
+                if Ride1_pattern[i] == 1:
+                    Snare.play()
+            else: 
+                pass
+            if Ride2_pattern[i]:
+                if Ride2_pattern[i] == 1:
+                    Snare.play()
+            else: 
+                pass
+            if HiHat_pattern[i]:
+                if HiHat_pattern[i] == 1:
+                    HiHat.play()
+            else: 
+                pass
+            if Tom_pattern[i]:
+                if Tom_pattern[i] == 1:
+                    Tom.play()
+            else: 
+                pass
+            pygame.time.wait(int(60000 / tempo))
+            #print(tempo)
+            
+            if playing == False:
+                break

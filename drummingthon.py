@@ -22,7 +22,7 @@ Tom_pattern = [0, 0, 0, 0]
 playing = False
 
 # Define the tempo (in BPM)
-tempo = 60
+tempo = 120
 
 # Calculate the time for each step (in milliseconds)
 step_time = 60000 / tempo
@@ -38,35 +38,100 @@ def play(self, ping=None):
 
     while playing:
         for i in range(len(kick_pattern)):
-            if kick_pattern[i] == 1:
-                Kick.play()
-            if Snare_pattern[i] == 1:
-                Snare.play()
-            if Ride1_pattern[i] == 1:
-                Snare.play()
-            if Ride2_pattern[i] == 1:
-                Snare.play()
-            if HiHat_pattern[i] == 1:
-                HiHat.play()
-            if Tom_pattern[i] == 1:
-                Tom.play()
+            try:    
+                if kick_pattern[i] == 1:
+                    Kick.play()
+            except:
+                pass
+
+            try:
+                if Snare_pattern[i] == 1:
+                    Snare.play()
+            except:
+                pass
+            
+            try:
+                if Ride1_pattern[i] == 1:
+                    Snare.play()
+            except:
+                pass
+            try:
+                if Ride2_pattern[i] == 1:
+                    Snare.play()
+            except:
+                pass
+            try:
+                if HiHat_pattern[i] == 1:
+                    HiHat.play()
+            except:
+                pass
+            try:
+                if Tom_pattern[i] == 1:
+                    Tom.play()
+            except:
+                pass
             pygame.time.wait(int(step_time))
             
             if playing == False:
                 break
-
 #    pygame.time.wait(int(step_time * len(kick_pattern)))
 
 
-
+lineNumbers = 4
 
 # ------------------- Bienvenidos al infierno -------------------------------#
 
 import flet as ft
 
 def main(page: ft.Page):
+    global step_time
 
-    bpm_number = ft.TextField(value=tempo, text_align=ft.TextAlign.RIGHT, width=100)
+    def changeBPM(self):
+        global tempo
+        tempo = int(bpm_number.value)
+        print(str(tempo))
+        step_time = 60000 / tempo
+
+    def remove_line(self):
+        
+        #DrumTable.rows.pop()
+        #page.update()
+        #for row in DrumTable.rows:
+        #    row.cells.pop()
+        #    page.update()
+
+        #    """
+        #    for cell in row.cells:
+        #        print(cell)
+        #        
+        #        page.update()
+        #       #row.cells.pop()
+        #        #page.update()
+        #    """
+        DrumTable.columns.pop()
+
+        DrumTable.rows[0].cells.pop()
+        kick_pattern.pop()
+
+        DrumTable.rows[1].cells.pop()
+        Snare_pattern.pop()
+
+        DrumTable.rows[2].cells.pop()
+        Ride1_pattern.pop()
+
+        DrumTable.rows[3].cells.pop()
+        Ride2_pattern.pop()
+
+        DrumTable.rows[4].cells.pop()
+        HiHat_pattern.pop()
+
+        DrumTable.rows[5].cells.pop()
+        Ride1_pattern.pop()
+
+        page.update()
+
+
+    bpm_number = ft.TextField(value=tempo, text_align=ft.TextAlign.RIGHT, width=100, on_change=changeBPM)
 
     def checkbox_changed(pattern, val, e):
         #var[val] = str(int(e.value))
@@ -76,28 +141,8 @@ def main(page: ft.Page):
         pattern[val] = int(e)
         print(pattern)
 
-    def lessBPM(self):
-        if tempo > 0:
-            tempo = tempo-1
-
-    def addBPM(self):
-        tempo = tempo+1
-  
-
-    page.add(
-        # Contador de BPM
-       ft.Row(
-            [
-                ft.IconButton(ft.icons.REMOVE, on_click=lessBPM),
-                bpm_number,
-                ft.IconButton(ft.icons.ADD, on_click=addBPM),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-        ),
-
-        # TABLA INFERNAL
-
-        ft.DataTable(
+    #----- Aqui se pone la table 
+    DrumTable = ft.DataTable(
             columns=[
                 ft.DataColumn(ft.Text("")),
                 ft.DataColumn(ft.Text("")),
@@ -163,13 +208,45 @@ def main(page: ft.Page):
                     ],
                 ),
             ],
+        )
+
+
+    page.add(
+
+        DrumTable,
+
+        # Contador de BPM
+       ft.Row(
+            [
+                ft.Text("BPM", style=ft.TextThemeStyle.LABEL_LARGE),
+                bpm_number
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
         ),
 
-        ft.FloatingActionButton(icon=ft.icons.ADD, on_click=play, bgcolor=ft.colors.BLUE_300)
+        # TABLA INFERNAL
+
+
+        ft.Row(
+            [
+                ft.IconButton(ft.icons.REMOVE, on_click=remove_line),
+                #ft.IconButton(ft.icons.ADD, on_click=add_line),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+        ), 
+
+        ft.FloatingActionButton(icon=ft.icons.ADD, on_click=play, bgcolor=ft.colors.BLUE_300),
+
+        
+
+
 
     )
 
+
 ft.app(target=main)
+
+
 
 #-------------------- gracias por su estadia en el infierno ------------------#
 
